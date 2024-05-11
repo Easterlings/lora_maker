@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>新建LORA</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+
+  </head>
+  <body>
+    <main class="container">
+      <h1>新建LORA</h1>
+      <form method=post enctype=multipart/form-data action="/upload">
+        <input type=file name=file[] multiple  required="required"><br>
+        <label for="fname">lora name:</label>
+        <input type=text name=lora_name required="required"><br>
+        <input type=submit value=创建lora训练任务>
+      </form>
+    </main>
+  </body>
+</html>
