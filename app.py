@@ -33,7 +33,10 @@ def upload_file():
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+
+    tasks = db.session.query(train_tasks).filter(train_tasks.trained == 0).all()
+    
+    return render_template('index.html', tasks=tasks)
 
 if __name__ == '__main__':
     app.run()
