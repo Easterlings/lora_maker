@@ -5,7 +5,7 @@ import os
 import time
 
 app = Flask(__name__)
-app.config.from_object('config.Config')
+app.config.from_object('config.config.Config')
 db.init_app(app)
 
 @app.route('/upload', methods=['POST'])
@@ -39,4 +39,4 @@ def home():
     return render_template('index.html', tasks=tasks)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host="0.0.0.0")
