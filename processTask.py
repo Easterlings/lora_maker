@@ -1,12 +1,13 @@
-#TODO 从数据库读取未训练任务，获取其文件路径及其它参数，跑face_only
+#从数据库读取未训练任务，获取其文件路径及其它参数，跑get_theme_only，提取训练主体，填写参数，跑训练脚本
 from models import db, train_tasks
 from app import app
-from copy_face import face_only
+from copy_face import get_theme_only
 import os 
 import subprocess
 from config.system import TRAIN_RESOURCES_PATH, LORA_SCRIPT_PATH, SD_LORA_MODEL_DIR, LORA_SCRIPT_TRAIN_PATH
 import shutil
 
+os.environ['CURL_CA_BUNDLE'] = '' 
 
 def clear_train_dir():
     assert len(TRAIN_RESOURCES_PATH.split("/")) > 2
@@ -57,11 +58,12 @@ def main():
             print("==============================")
             clear_train_dir()
             sourceDir = task.img_dir
+            theme = task.theme
             for filename in os.listdir(sourceDir):
                 # 检索要训练的元素，保存到两个文件夹
                 edgeWidth = 0
                 imagesize = (512, 512)
-                face_only(sourceDir, filename, edgeWidth, imagesize)
+                get_theme_only(sourceDir, filename, edgeWidth, imagesize, theme)
             train_dir = "10_" + sourceDir.split("/")[-1]
             train_path = os.path.join(TRAIN_RESOURCES_PATH, train_dir)
             if not os.path.exists(train_path):
@@ -74,7 +76,7 @@ def main():
             else:
                 pass
 
-            move_to_sd_dir(task)
+            # move_to_sd_dir(task)
 
     
 

@@ -12,7 +12,7 @@ from local_groundingdino.util.inference import Model
 # from rembg_group import rem_bg
 import random
 from config.system import GROUNDING_DINO_CONFIG_PATH,GROUNDING_DINO_CHECKPOINT_PATH,SOURCE_IMAGE_PATH,RESULT_IMAGE_PATH,TRAIN_RESOURCES_PATH
-from config.system import BOX_THRESHOLD,CLASSES,TEXT_THRESHOLD,NMS_THRESHOLD
+from config.system import BOX_THRESHOLD,TEXT_THRESHOLD,NMS_THRESHOLD
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # Building GroundingDINO inference model
@@ -32,7 +32,7 @@ def indexOfMaxConfidence(confidences):
     return maxI
 
 
-def face_only(sourceDir, filename, edgeWidth, imagesize):
+def get_theme_only(sourceDir, filename, edgeWidth, imagesize, theme):
     '''
     sourceDir: 源文件（图片）相对路径
     filename: 文件（图片）名
@@ -45,7 +45,7 @@ def face_only(sourceDir, filename, edgeWidth, imagesize):
     image = cv2.imread(os.path.join(sourceDir, filename))
     detections = grounding_dino_model.predict_with_classes(
         image=image,
-        classes=CLASSES,
+        classes=[theme],
         box_threshold=BOX_THRESHOLD,
         text_threshold=TEXT_THRESHOLD
     )
@@ -114,10 +114,10 @@ def fitin(cropBox,image):
         cropBox[3]-=cropBox[1]
         cropBox[1]=0
     if cropBox[2]>width:
-        cropBox[0]=cropBox[0]-cropBox[2]+width
+        cropBox[0]=max(cropBox[0]-cropBox[2]+width,0)
         cropBox[2]=width
     if cropBox[3]>height:
-        cropBox[1]=cropBox[1]-cropBox[3]+height
+        cropBox[1]=max(cropBox[1]-cropBox[3]+height,0)
         cropBox[3]=height
 
     return cropBox
@@ -126,13 +126,14 @@ if __name__=="__main__":
 
     edgeWidth = 0
     imagesize = (128, 128)
+    theme = "apparel"
     for dir in os.listdir(SOURCE_IMAGE_PATH):
         sourceDir = os.path.join(SOURCE_IMAGE_PATH, dir)
         if os.path.isfile(sourceDir):
             continue
         for filename in os.listdir(sourceDir):
             print(filename)
-            face_only(sourceDir, filename, edgeWidth, imagesize)
+            get_theme_only(sourceDir, filename, edgeWidth, imagesize, theme)
 
     # image_folder = os.path.join(RESULT_IMAGE_PATH, dir)
     # output_folder = os.path.join(RESULT_IMAGE_PATH, f"{dir}_nobg")

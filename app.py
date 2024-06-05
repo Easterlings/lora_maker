@@ -24,6 +24,7 @@ def upload_file():
     task = train_tasks(
         img_dir = files_path,
         lora_name = request.form['lora_name'],
+        theme = request.form['theme'],
         img_num = len(files),
     )
 

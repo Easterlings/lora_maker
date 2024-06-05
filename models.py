@@ -9,10 +9,12 @@ class train_tasks(db.Model):
     trained: Mapped[int] = db.Column(db.Integer, unique=True, nullable=False)
     user: Mapped[int] = db.Column(db.Integer, unique=True, nullable=True)
     lora_name: Mapped[str] = db.Column(db.String(32), unique=True, nullable=False)
+    theme: Mapped[str] = db.Column(db.String(100), unique=True, nullable=True)
     img_num: Mapped[int] = db.Column(db.Integer, unique=True, nullable=False)
 
-    def __init__(self, img_dir, lora_name, img_num):
+    def __init__(self, img_dir, lora_name, theme, img_num):
         self.img_dir = img_dir
         self.trained = 0
         self.lora_name = lora_name
+        self.theme = theme
         self.img_num = img_num
