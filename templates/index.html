@@ -22,15 +22,45 @@
     </form>
 
     <ul>
-      {% for task in tasks %}
-      <content>
-        <li>
-          <p> lora_name:{{task.lora_name}} </p>
-          <p> img_num:{{task.img_num}} </p>
-        </li>
-      </content>
+      <table>
+        <tbody>
+          <thead>
+            <tr>
+              <th scope="col">lora名称</th>
+              <th scope="col">图片数量</th>
+              <th scope="col">训练情况</th>
+              <th scope="col">lora关键词</th>
+              <th scope="col">任务新建时间</th>
+            </tr>
+          </thead>
+          {% for task in tasks %}
+          <thead>
+            <tr>
+              <td>{{task.lora_name}}</td>
+              <td>{{task.img_num}}</td>
+              {% if task.trained %}
+              <td>已训练</td>
+              {% else %}
+              <td>待训练</td>
+              {% endif %}
+              {% if task.trained %}
+              <td>&lt;lora:{{task.lora_name}}:1&gt;</td>
+              {% else %}
+              <td></td>
+              {% endif %}
+              <td>{{task.created_at}}</td>
 
-      {% endfor %}
+              <td>
+                <form action="/delete" method="post">
+                  <input type="hidden" name="id" value="{{ task.id }}">
+                  <button type="submit">删除</button>
+                </form>
+              </td>
+            </tr>
+          </thead>
+          {% endfor %}
+        </tbody>
+      </table>
     </ul>
   </main>
 </body>

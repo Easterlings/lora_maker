@@ -13,10 +13,10 @@ RESULT_IMAGE_PATH = os.getenv('RESULT_IMAGE_PATH')
 TRAIN_RESOURCES_PATH = os.getenv('TRAIN_RESOURCES_PATH')
 
 # GroundingDINO class and threshold parameter config
-CLASSES = ["head"] 
 BOX_THRESHOLD = 0.10
 TEXT_THRESHOLD = 0.35
 NMS_THRESHOLD = 0.5
+VALSUN_SSO_SYSTEM_NAME = 'wardrobe'
 
 # LORA_SCRIPT config
 LORA_SCRIPT_PATH = os.getenv('LORA_SCRIPT_PATH')
