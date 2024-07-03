@@ -4,3 +4,4 @@ images/
 .vscode
 result_imgs/
 .env
+flask_session/

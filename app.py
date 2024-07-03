@@ -1,6 +1,6 @@
 from flask import Flask, request, redirect, url_for, render_template, jsonify
 from werkzeug.utils import secure_filename
-from models import db, train_tasks
+from common.models import db, train_tasks
 import os
 import time
 from functools import wraps
@@ -55,6 +55,15 @@ def upload_file():
     task = train_tasks(
         img_dir = files_path,
         lora_name = request.form['lora_name'],
+        network_dim = request.form['network_dim'] if request.form['network_dim'] else 128,
+        network_alpha = request.form['network_alpha'] if request.form['network_alpha'] else 64,
+        resolution = request.form['resolution'] if request.form['resolution'] else "512,512",
+        batch_size = request.form['batch_size'] if request.form['batch_size'] else 2,
+        max_train_epoches = request.form['max_train_epoches'] if request.form['max_train_epoches'] else 20,
+        save_every_n_epochs = request.form['save_every_n_epochs'] if request.form['save_every_n_epochs'] else 2,
+        lr = request.form['lr'] if request.form['lr'] else "5e-5",
+        unet_lr = request.form['unet_lr'] if request.form['unet_lr'] else "5e-5",
+        text_encoder_lr = request.form['text_encoder_lr'] if request.form['text_encoder_lr'] else "1e-5",
         job_no = user_info['job_no'],
         theme = request.form['theme'],
         img_num = len(files),
@@ -88,4 +97,4 @@ def home():
     return render_template('index.html', tasks = tasks)
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0")
+    app.run(host="0.0.0.0",port=5000,debug=True)
