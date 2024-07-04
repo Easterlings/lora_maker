@@ -4,13 +4,13 @@ from common.models import db, train_tasks
 import os
 import time
 from functools import wraps
-from config.system import VALSUN_SSO_SYSTEM_NAME
+from config.system import VALSUN_SSO_SYSTEM_NAME,UPLOAD_FOLDER,SQLALCHEMY_DATABASE_URI
 from common.valsun_sso import Sso
 from flask_session import Session
 from sqlalchemy.sql import func
 
 app = Flask(__name__)
-app.config.from_object('config.config.Config')
+app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 db.init_app(app)
 app.secret_key = ""
 app.config['SESSION_TYPE'] = 'filesystem'
@@ -43,7 +43,7 @@ def upload_file():
     user_info = Sso.get_user_info()
     files = request.files.getlist('file[]')
     timestamp = time.time()
-    files_path = os.path.join(app.config['UPLOAD_FOLDER'], str(timestamp))
+    files_path = os.path.join(UPLOAD_FOLDER, str(timestamp))
     if not os.path.exists(files_path):
         os.makedirs(files_path)
 

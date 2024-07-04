@@ -1,10 +1,6 @@
-import os
-import shutil
 import base64
-from io import BytesIO
-from PIL import Image, ImageOps, PngImagePlugin,JpegImagePlugin
+from PIL import Image, JpegImagePlugin
 import io
-import numpy as np
 
 def image_to_base64(image):
     if isinstance(image, bytes):
