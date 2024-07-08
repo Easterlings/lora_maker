@@ -39,50 +39,53 @@ def get_theme_only(sourceDir, filename, edgeWidth, imagesize, theme):
     edgeWidth:
     imagesize:
     '''
-    targetDir = "10_" + sourceDir.split("/")[-1]
-    DirPath = os.path.join(RESULT_IMAGE_PATH, targetDir)
-    TRDirPath = os.path.join(TRAIN_RESOURCES_PATH, targetDir)
-    image = cv2.imread(os.path.join(sourceDir, filename))
-    detections = grounding_dino_model.predict_with_classes(
-        image=image,
-        classes=[theme],
-        box_threshold=BOX_THRESHOLD,
-        text_threshold=TEXT_THRESHOLD
-    )
-    nms_idx = torchvision.ops.nms(
-        torch.from_numpy(detections.xyxy),
-        torch.from_numpy(detections.confidence),
-        NMS_THRESHOLD
-    ).numpy().tolist()
-    print(f"Before NMS: {len(detections.xyxy)} boxes")
-    detections.xyxy = detections.xyxy[nms_idx]
-    detections.confidence = detections.confidence[nms_idx]
-    detections.class_id = detections.class_id[nms_idx]
-    print(f"After NMS: {len(detections.xyxy)} boxes")
-    index = indexOfMaxConfidence(detections.confidence)
-    if index < 0:
-        return
+    try:
+        targetDir = "10_" + sourceDir.split("/")[-1]
+        DirPath = os.path.join(RESULT_IMAGE_PATH, targetDir)
+        TRDirPath = os.path.join(TRAIN_RESOURCES_PATH, targetDir)
+        image = cv2.imread(os.path.join(sourceDir, filename))
+        detections = grounding_dino_model.predict_with_classes(
+            image=image,
+            classes=[theme],
+            box_threshold=BOX_THRESHOLD,
+            text_threshold=TEXT_THRESHOLD
+        )
+        nms_idx = torchvision.ops.nms(
+            torch.from_numpy(detections.xyxy),
+            torch.from_numpy(detections.confidence),
+            NMS_THRESHOLD
+        ).numpy().tolist()
+        print(f"Before NMS: {len(detections.xyxy)} boxes")
+        detections.xyxy = detections.xyxy[nms_idx]
+        detections.confidence = detections.confidence[nms_idx]
+        detections.class_id = detections.class_id[nms_idx]
+        print(f"After NMS: {len(detections.xyxy)} boxes")
+        index = indexOfMaxConfidence(detections.confidence)
+        if index < 0:
+            return
 
-    if not os.path.exists(TRDirPath):
-        os.makedirs(TRDirPath)
-    if not os.path.exists(DirPath):
-        os.makedirs(DirPath)
-    localFilepath = os.path.join(DirPath, filename)
-    boxFilepath = os.path.join(TRDirPath, filename)
+        if not os.path.exists(TRDirPath):
+            os.makedirs(TRDirPath)
+        if not os.path.exists(DirPath):
+            os.makedirs(DirPath)
+        localFilepath = os.path.join(DirPath, filename)
+        boxFilepath = os.path.join(TRDirPath, filename)
 
-    cropBox = detections.xyxy[index]
+        cropBox = detections.xyxy[index]
 
-    cropBox = square(cropBox)#调整为方形
-    cropBox = addN(cropBox, edgeWidth)
-    # cropBox = addN(cropBox,random.randint(0, 4)*100)
-    # print("cropBox:",cropBox)
-    cropBox = fitin(cropBox,image)
-    cropImage = image[int(cropBox[1]):int(cropBox[3]), int(cropBox[0]): int(cropBox[2])]#y1 y2 x1 x2
-    resizeImage = cv2.resize(cropImage, imagesize)
-    cv2.imwrite(localFilepath, resizeImage)
-    cv2.imwrite(boxFilepath, resizeImage)
-    print('targetDir:',targetDir)
-    return targetDir
+        cropBox = square(cropBox)#调整为方形
+        cropBox = addN(cropBox, edgeWidth)
+        # cropBox = addN(cropBox,random.randint(0, 4)*100)
+        # print("cropBox:",cropBox)
+        cropBox = fitin(cropBox,image)
+        cropImage = image[int(cropBox[1]):int(cropBox[3]), int(cropBox[0]): int(cropBox[2])]#y1 y2 x1 x2
+        resizeImage = cv2.resize(cropImage, imagesize)
+        cv2.imwrite(localFilepath, resizeImage)
+        cv2.imwrite(boxFilepath, resizeImage)
+        print('targetDir:',targetDir)
+        return targetDir
+    except Exception as e:
+        raise Exception(f"An error exists in get_theme_only: {str(e)}")
 
 def square(cropBox):
     xlength= int(cropBox[2])-int(cropBox[0])

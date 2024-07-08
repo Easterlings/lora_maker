@@ -56,10 +56,14 @@
             <tr>
               <td>{{task.lora_name}}</td>
               <td>{{task.img_num}}</td>
-              {% if task.trained %}
-              <td>已训练</td>
-              {% else %}
+              {% if task.trained == 0 %}
               <td>待训练</td>
+              {% endif %}
+              {% if task.trained == 1 %}
+              <td>已训练</td>
+              {% endif %}
+              {% if task.trained == 2 %}
+              <td>训练异常，待处理</td>
               {% endif %}
               {% if task.trained %}
               <td>&lt;lora:{{task.lora_name}}:1&gt;</td>

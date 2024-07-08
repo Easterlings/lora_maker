@@ -3,9 +3,10 @@ import json
 import requests
 from flask import request, session
 from config.available_pro_users import AVAILABLE_PRO_USERS
+from config.system import SSO_URL
 
 class Sso:
-    sso_url = 'https://sso.valsun.cn/'
+    sso_url = SSO_URL
     system_name = ''
     err_code = "0"
     err_msg = ""

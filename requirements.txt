@@ -1,0 +1,14 @@
+sqlalchemy
+flask
+flask_sqlalchemy
+python-dotenv
+requests
+flask_session
+pymysql
+opencv-python
+torch==2.0.0+cu118 
+torchvision==0.15.1+cu118
+supervision
+transformers
+timm
+addict

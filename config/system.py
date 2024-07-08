@@ -4,6 +4,8 @@ import os
 # 加载 .env 文件中的环境变量
 load_dotenv()
 
+SSO_URL = 'https://sso.valsun.cn/'
+
 # GroundingDINO config and checkpoint path
 GROUNDING_DINO_CONFIG_PATH = os.getenv('GROUNDING_DINO_CONFIG_PATH')
 GROUNDING_DINO_CHECKPOINT_PATH = os.getenv('GROUNDING_DINO_CHECKPOINT_PATH')

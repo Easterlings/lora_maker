@@ -8,6 +8,10 @@ from config.system import VALSUN_SSO_SYSTEM_NAME,UPLOAD_FOLDER,SQLALCHEMY_DATABA
 from common.valsun_sso import Sso
 from flask_session import Session
 from sqlalchemy.sql import func
+import logging
+
+# 设置日志级别和格式
+logging.basicConfig(filename='logging.log', level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s')
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI

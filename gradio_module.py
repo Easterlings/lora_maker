@@ -1,19 +1,9 @@
-#gradio 图片输入输出demo
-import numpy as np
+#gradio 图片输入输出模块
 import gradio as gr
 from PIL import Image
 from common.sd_api import img2img_request, get_img2img_request_data
 from utils import image_to_base64,base64_to_image
 
-def sepia(input_img):
-    sepia_filter = np.array([
-        [0.393, 0.769, 0.189], 
-        [0.349, 0.686, 0.168], 
-        [0.272, 0.534, 0.131]
-    ])
-    sepia_img = input_img.dot(sepia_filter.T)
-    sepia_img /= sepia_img.max()
-    return sepia_img
 
 def sd_img2img_with_lora(img, prompt, denoising_strength):
     pil_image = Image.fromarray(img)
@@ -37,6 +27,5 @@ demo = gr.Interface(
     inputs=[gr.Image(), "text", gr.Slider(0, 1, step=0.01)],
     outputs= ["image"]
     )
-
 
 demo.launch(server_name = "0.0.0.0", server_port=8080)
