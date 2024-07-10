@@ -10,6 +10,7 @@ from flask_session import Session
 from sqlalchemy.sql import func
 import logging
 from PIL import Image
+import shutil
 
 # 设置日志级别和格式
 logging.basicConfig(filename='logging.log', level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s')
@@ -98,9 +99,15 @@ def delete_task():
     task = db.session.execute(db.select(train_tasks)
                               .filter(train_tasks.job_no == job_no)
                               .filter(train_tasks.id == id)).scalar_one()
+    # 删除上传图和缩略图
+    if os.path.exists(task.img_dir):
+        shutil.rmtree(task.img_dir)
+    if os.path.exists(os.path.dirname(task.thumbnail)):
+        shutil.rmtree(os.path.dirname(task.thumbnail))
+
+    # 删除数据库记录
     db.session.delete(task)
     db.session.commit()
-    #TODO 删除上传图和缩略图
     return redirect(url_for('home'))
 
 @app.route('/')
