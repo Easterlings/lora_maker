@@ -1,14 +1,15 @@
-from flask import Flask, request, redirect, url_for, render_template, jsonify
+from flask import Flask, request, redirect, url_for, render_template, jsonify, send_from_directory
 from werkzeug.utils import secure_filename
 from common.models import db, train_tasks
 import os
 import time
 from functools import wraps
-from config.system import VALSUN_SSO_SYSTEM_NAME,UPLOAD_FOLDER,SQLALCHEMY_DATABASE_URI
+from config.system import VALSUN_SSO_SYSTEM_NAME,THUMBNAIL_PATH,UPLOAD_IMAGE_PATH,SQLALCHEMY_DATABASE_URI
 from common.valsun_sso import Sso
 from flask_session import Session
 from sqlalchemy.sql import func
 import logging
+from PIL import Image
 
 # 设置日志级别和格式
 logging.basicConfig(filename='logging.log', level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s')
@@ -47,24 +48,33 @@ def upload_file():
     user_info = Sso.get_user_info()
     files = request.files.getlist('file[]')
     timestamp = time.time()
-    files_path = os.path.join(UPLOAD_FOLDER, str(timestamp))
+    files_path = os.path.join(UPLOAD_IMAGE_PATH, str(timestamp))
+    thumbnail_path = os.path.join(THUMBNAIL_PATH, str(timestamp))
     if not os.path.exists(files_path):
         os.makedirs(files_path)
-
-    for file in files:
+    if not os.path.exists(thumbnail_path):
+        os.makedirs(thumbnail_path)
+    for i, file in enumerate(files):
+        filename = secure_filename(file.filename)
+        original_full_path = os.path.join(files_path, filename)
         if file:
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(files_path, filename))
+            file.save(original_full_path)
+        if i==0:
+            with Image.open(original_full_path) as img:
+                img.thumbnail((512, 512))  # 这里的(128, 128)是缩略图的大小，可以根据需要调整
+                thumbnail_full_path = os.path.join(thumbnail_path, filename)
+                img.save(thumbnail_full_path)
 
     task = train_tasks(
         img_dir = files_path,
+        thumbnail = thumbnail_full_path,
         lora_name = request.form['lora_name'],
         network_dim = request.form['network_dim'] if request.form['network_dim'] else 128,
         network_alpha = request.form['network_alpha'] if request.form['network_alpha'] else 64,
         resolution = request.form['resolution'] if request.form['resolution'] else "512,512",
-        batch_size = request.form['batch_size'] if request.form['batch_size'] else 2,
+        batch_size = request.form['batch_size'] if request.form['batch_size'] else 1,
         max_train_epoches = request.form['max_train_epoches'] if request.form['max_train_epoches'] else 20,
-        save_every_n_epochs = request.form['save_every_n_epochs'] if request.form['save_every_n_epochs'] else 2,
+        save_every_n_epochs = request.form['save_every_n_epochs'] if request.form['save_every_n_epochs'] else 5,
         lr = request.form['lr'] if request.form['lr'] else "5e-5",
         unet_lr = request.form['unet_lr'] if request.form['unet_lr'] else "5e-5",
         text_encoder_lr = request.form['text_encoder_lr'] if request.form['text_encoder_lr'] else "1e-5",
@@ -90,6 +100,7 @@ def delete_task():
                               .filter(train_tasks.id == id)).scalar_one()
     db.session.delete(task)
     db.session.commit()
+    #TODO 删除上传图和缩略图
     return redirect(url_for('home'))
 
 @app.route('/')
@@ -99,6 +110,10 @@ def home():
     job_no = user_info['job_no']
     tasks = db.session.query(train_tasks).filter(train_tasks.job_no == job_no).all()
     return render_template('index.html', tasks = tasks)
+
+@app.route('/images/<path:filename>')
+def uploaded_file(filename):
+    return send_from_directory("images", filename)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0",port=5000,debug=True)

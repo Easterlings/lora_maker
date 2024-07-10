@@ -11,7 +11,7 @@ import torchvision
 from local_groundingdino.util.inference import Model
 # from rembg_group import rem_bg
 import random
-from config.system import GROUNDING_DINO_CONFIG_PATH,GROUNDING_DINO_CHECKPOINT_PATH,SOURCE_IMAGE_PATH,RESULT_IMAGE_PATH,TRAIN_RESOURCES_PATH
+from config.system import GROUNDING_DINO_CONFIG_PATH,GROUNDING_DINO_CHECKPOINT_PATH,UPLOAD_IMAGE_PATH,RESULT_IMAGE_PATH,TRAIN_RESOURCES_PATH
 from config.system import BOX_THRESHOLD,TEXT_THRESHOLD,NMS_THRESHOLD
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -130,8 +130,8 @@ if __name__=="__main__":
     edgeWidth = 0
     imagesize = (128, 128)
     theme = "apparel"
-    for dir in os.listdir(SOURCE_IMAGE_PATH):
-        sourceDir = os.path.join(SOURCE_IMAGE_PATH, dir)
+    for dir in os.listdir(UPLOAD_IMAGE_PATH):
+        sourceDir = os.path.join(UPLOAD_IMAGE_PATH, dir)
         if os.path.isfile(sourceDir):
             continue
         for filename in os.listdir(sourceDir):

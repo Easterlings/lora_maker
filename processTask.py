@@ -75,6 +75,8 @@ def train():
 def processTask(task):
     try:
         print("==============================")
+        task.trained = 2
+        db.session.commit()
         clear_train_dir()
         sourceDir = task.img_dir
         theme = task.theme
@@ -93,9 +95,11 @@ def processTask(task):
         task.trained = 1
         db.session.commit()
 
+        #TODO 删除训练中间环节图
+
     except Exception as e:
         # 发生异常时返回错误信息，任务状态码改为2，以备后续处理
-        task.trained = 2
+        task.trained = 3
         db.session.commit()
         logging.error(f'Error during processTask:{e}')
 
