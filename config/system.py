@@ -30,4 +30,7 @@ SD_LORA_MODEL_DIR = os.getenv('SD_LORA_MODEL_DIR')
 
 SD_API = "http://192.168.200.143:9999"
 
+#image process api
+IMAGE_PROCESS_API_URL = os.getenv('IMAGE_PROCESS_API_URL')
+
 SQLALCHEMY_DATABASE_URI = f'mysql+pymysql://root:123456@192.168.200.193/make_lora'  # 替换为你的数据库 URI

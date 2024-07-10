@@ -6,6 +6,8 @@ import time
 from functools import wraps
 from config.system import VALSUN_SSO_SYSTEM_NAME,THUMBNAIL_PATH,UPLOAD_IMAGE_PATH,SQLALCHEMY_DATABASE_URI
 from common.valsun_sso import Sso
+from common.image_process_api import rem_bg_request
+from utils import base64_to_image
 from flask_session import Session
 from sqlalchemy.sql import func
 import logging
@@ -59,7 +61,13 @@ def upload_file():
         filename = secure_filename(file.filename)
         original_full_path = os.path.join(files_path, filename)
         if file:
-            file.save(original_full_path)
+            if('rembg' in request.form):
+                resp = rem_bg_request(file)
+                no_bg_image_b64 = resp.json()["data"].get('no_bg_image')
+                nobg_image = base64_to_image(no_bg_image_b64)
+                nobg_image.save(original_full_path)
+            else:
+                file.save(original_full_path)
         if i==0:
             with Image.open(original_full_path) as img:
                 img.thumbnail((512, 512))  # 这里的(128, 128)是缩略图的大小，可以根据需要调整
