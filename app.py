@@ -64,7 +64,7 @@ def upload_file():
             if('rembg' in request.form):
                 resp = rem_bg_request(file)
                 no_bg_image_b64 = resp.json()["data"].get('no_bg_image')
-                nobg_image = base64_to_image(no_bg_image_b64)
+                nobg_image = base64_to_image(no_bg_image_b64).convert('RGB')
                 nobg_image.save(original_full_path)
             else:
                 file.save(original_full_path)
@@ -78,14 +78,14 @@ def upload_file():
         img_dir = files_path,
         thumbnail = thumbnail_full_path,
         lora_name = request.form['lora_name'],
-        network_dim = request.form['network_dim'] if request.form['network_dim'] else 128,
-        network_alpha = request.form['network_alpha'] if request.form['network_alpha'] else 64,
+        network_dim = request.form['network_dim'] if request.form['network_dim'] else 32,
+        network_alpha = request.form['network_alpha'] if request.form['network_alpha'] else 32,
         resolution = request.form['resolution'] if request.form['resolution'] else "512,512",
         batch_size = request.form['batch_size'] if request.form['batch_size'] else 1,
-        max_train_epoches = request.form['max_train_epoches'] if request.form['max_train_epoches'] else 20,
+        max_train_epoches = request.form['max_train_epoches'] if request.form['max_train_epoches'] else 10,
         save_every_n_epochs = request.form['save_every_n_epochs'] if request.form['save_every_n_epochs'] else 5,
-        lr = request.form['lr'] if request.form['lr'] else "5e-5",
-        unet_lr = request.form['unet_lr'] if request.form['unet_lr'] else "5e-5",
+        lr = request.form['lr'] if request.form['lr'] else "1e-4",
+        unet_lr = request.form['unet_lr'] if request.form['unet_lr'] else "1e-4",
         text_encoder_lr = request.form['text_encoder_lr'] if request.form['text_encoder_lr'] else "1e-5",
         job_no = user_info['job_no'],
         theme = request.form['theme'],

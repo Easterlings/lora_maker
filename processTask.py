@@ -113,7 +113,7 @@ def processTasks():
                     processTask(task)
             else:
                 print("No unprocessed tasks found. Sleeping for a while...")
-                time.sleep(5)
+                time.sleep(60)
 
     
 

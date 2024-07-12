@@ -18,21 +18,21 @@
       <input type=text name=lora_name required="required"><br>
       <label for="fname"><input type="checkbox"name=rembg >是否去背景（去背景会消耗一定时间）</label><br>
       <label for="fname">network_dim（network dim | 决定了lora的规模大小， 常用 4~128，不是越大越好）:</label>
-      <input type=text name=network_dim placeholder="128"><br>
+      <input type=text name=network_dim placeholder="32"><br>
       <label for="fname">network_alpha（network alpha | 常用与 network_dim 相同的值或者采用较小的值，如 network_dim的一半 防止下溢。默认值为 1，使用较小的 alpha 需要提升学习率。）:</label>
-      <input type=text name=network_alpha placeholder="64"><br>
+      <input type=text name=network_alpha placeholder="32"><br>
       <label for="fname">resolution（image resolution w,h. 用多大的分辨率来识别上传图，宽,高。支持非正方形，但必须是 64 倍数。如：512,512）:</label>
       <input type=text name=resolution placeholder="512,512"><br>
       <label for="fname">batch_size:(批次尺寸，初始为1，batch_size越大，训练速度越快，显存占用越多)</label>
       <input type=text name=batch_size placeholder="1"><br>
       <label for="fname">max_train_epoches（最大训练步数）:</label>
-      <input type=text name=max_train_epoches placeholder="20"><br>
+      <input type=text name=max_train_epoches placeholder="10"><br>
       <label for="fname">save_every_n_epochs（每 N 个 epoch 保存一次）:</label>
       <input type=text name=save_every_n_epochs placeholder="5"><br>
       <label for="fname">lr（学习率，使用科学计数法）:</label>
-      <input type=text name=lr placeholder="5e-5"><br>
+      <input type=text name=lr placeholder="1e-4"><br>
       <label for="fname">unet_lr:</label>
-      <input type=text name=unet_lr placeholder="5e-5"><br>
+      <input type=text name=unet_lr placeholder="1e-4"><br>
       <label for="fname">text_encoder_lr:</label>
       <input type=text name=text_encoder_lr placeholder="1e-5"><br>
       <label for="fname">训练主体（训练面部使用head而非face，训练服装可以使用apparel,clothes,dress,shirt,etc.）:</label>
@@ -113,7 +113,7 @@
         </div>
       </div>
     </div> -->
-    <iframe src="http://192.168.200.143:8080/" width="100%" height="600" frameborder="0" allowfullscreen></iframe>
+    <iframe src="http://192.168.200.143:9999/" width="100%" height="600" frameborder="0" allowfullscreen></iframe>
   </main>
 </body>
 

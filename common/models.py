@@ -6,7 +6,7 @@ db = SQLAlchemy()
 class train_tasks(db.Model):
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)
     img_dir: Mapped[str] = db.Column(db.String(128), unique=True, nullable=True)
-    thumbnail: Mapped[str] = db.Column(db.String(100), unique=True, nullable=True)
+    thumbnail: Mapped[str] = db.Column(db.String(256), unique=True, nullable=True)
     trained: Mapped[int] = db.Column(db.Integer, unique=True, nullable=False)
     job_no: Mapped[int] = db.Column(db.Integer, unique=True, nullable=True)
     lora_name: Mapped[str] = db.Column(db.String(32), unique=True, nullable=False)
