@@ -78,6 +78,7 @@ def upload_file():
         img_dir = files_path,
         thumbnail = thumbnail_full_path,
         lora_name = request.form['lora_name'],
+        autotag = 1 if 'autotag' in request.form else 0,
         network_dim = request.form['network_dim'] if request.form['network_dim'] else 32,
         network_alpha = request.form['network_alpha'] if request.form['network_alpha'] else 32,
         resolution = request.form['resolution'] if request.form['resolution'] else "512,512",

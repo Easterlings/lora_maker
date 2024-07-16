@@ -10,6 +10,7 @@ class train_tasks(db.Model):
     trained: Mapped[int] = db.Column(db.Integer, unique=True, nullable=False)
     job_no: Mapped[int] = db.Column(db.Integer, unique=True, nullable=True)
     lora_name: Mapped[str] = db.Column(db.String(32), unique=True, nullable=False)
+    autotag: Mapped[int] = db.Column(db.Integer, unique=True, nullable=True)
     network_dim: Mapped[int] = db.Column(db.Integer, unique=True, nullable=True)
     network_alpha: Mapped[int] = db.Column(db.Integer, unique=True, nullable=True)
     resolution: Mapped[str] = db.Column(db.String(32), unique=True, nullable=True)
@@ -24,13 +25,14 @@ class train_tasks(db.Model):
     created_at: Mapped[datetime] = db.Column(db.DateTime, default=db.func.current_timestamp())
     updated_at: Mapped[datetime] = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
 
-    def __init__(self, img_dir, thumbnail, job_no, lora_name, network_dim, network_alpha, resolution, batch_size, 
+    def __init__(self, img_dir, thumbnail, job_no, lora_name, autotag, network_dim, network_alpha, resolution, batch_size, 
                  max_train_epoches, save_every_n_epochs, lr, unet_lr, text_encoder_lr, theme, img_num, created_at, updated_at):
         self.img_dir = img_dir
         self.thumbnail = thumbnail
         self.trained = 0
         self.job_no = job_no
         self.lora_name = lora_name
+        self.autotag = autotag
         self.network_dim = network_dim
         self.network_alpha = network_alpha
         self.resolution = resolution

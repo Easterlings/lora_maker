@@ -17,6 +17,7 @@
       <label for="fname">lora 模型名称:</label>
       <input type=text name=lora_name required="required"><br>
       <label for="fname"><input type="checkbox"name=rembg >是否去背景（去背景会消耗一定时间）</label><br>
+      <label for="fname"><input type="checkbox"name=autotag >是否自动打标签</label><br>
       <label for="fname">network_dim（network dim | 决定了lora的规模大小， 常用 4~128，不是越大越好）:</label>
       <input type=text name=network_dim placeholder="32"><br>
       <label for="fname">network_alpha（network alpha | 常用与 network_dim 相同的值或者采用较小的值，如 network_dim的一半 防止下溢。默认值为 1，使用较小的 alpha 需要提升学习率。）:</label>

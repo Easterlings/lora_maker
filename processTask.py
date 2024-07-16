@@ -8,6 +8,7 @@ from config.system import TRAIN_RESOURCES_PATH, LORA_SCRIPT_PATH, SD_LORA_MODEL_
 import shutil
 import time
 import logging
+from common.sd_api import interrogate_all_image
 
 # 设置日志级别和格式
 logging.basicConfig(filename='logging.log', level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s')
@@ -89,6 +90,10 @@ def processTask(task):
         train_path = os.path.join(TRAIN_RESOURCES_PATH, train_dir)
         if not os.path.exists(train_path):
             return 
+        print("====================",type(task.autotag),task.autotag)
+
+        if task.autotag == 1:
+            interrogate_all_image(train_path) #打标签
 
         set_config(task)
         train()
@@ -113,7 +118,7 @@ def processTasks():
                     processTask(task)
             else:
                 print("No unprocessed tasks found. Sleeping for a while...")
-                time.sleep(60)
+                time.sleep(5)
 
     
 
